@@ -1,0 +1,194 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Background Remover</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f9ff;
+        color: #222;
+    }
+
+    header {
+        background: #007bff;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        font-size: 22px;
+        font-weight: bold;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 20px auto;
+        padding: 15px;
+    }
+
+    .card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        border: 2px dashed #007bff;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        background: #f0f8ff;
+    }
+
+    button {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 12px;
+        width: 100%;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    button:hover {
+        background: #0056cc;
+    }
+
+    .preview {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+
+    .box {
+        flex: 1;
+        min-width: 250px;
+        text-align: center;
+    }
+
+    img {
+        width: 100%;
+        border-radius: 10px;
+        border: 2px solid #ddd;
+        background: #fff;
+    }
+
+    select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 8px;
+    }
+
+    @media(max-width: 600px){
+        .preview {
+            flex-direction: column;
+        }
+    }
+</style>
+
+
+
+
+<header> Image B.G Remover</header>
+
+<div class="container">
+    <div class="card">
+
+        <input type="file" id="imageInput" accept="image/*">
+
+        <button onclick="removeBackground()">Remove Background</button>
+
+        <div class="preview">
+            <div class="box">
+                <h3>Original</h3>
+                <img id="originalPreview">
+            </div>
+
+            <div class="box">
+                <h3>Result</h3>
+                <img id="resultPreview">
+            </div>
+        </div>
+
+        <select id="format">
+            <option value="png">PNG</option>
+            <option value="jpg">JPG</option>
+            <option value="webp">WEBP</option>
+        </select>
+
+        <button onclick="downloadImage()">Download</button>
+
+    </div>
+</div>
+
+<script>
+let apiKey = "Lj7eVAML9yE19epX7NWy9s3h"; // 🔴 Add your API key here
+let resultBlob = null;
+
+document.getElementById("imageInput").addEventListener("change", function(e){
+    const file = e.target.files[0];
+    if(file){
+        document.getElementById("originalPreview").src = URL.createObjectURL(file);
+    }
+});
+
+async function removeBackground(){
+    const fileInput = document.getElementById("imageInput");
+    if(!fileInput.files[0]){
+        alert("Please upload an image");
+        return;
+    }
+
+    let formData = new FormData();
+    formData.append("image_file", fileInput.files[0]);
+    formData.append("size", "auto");
+
+    document.getElementById("resultPreview").src = "https://i.imgur.com/llF5iyg.gif"; // loader
+
+    try {
+        let res = await fetch("https://api.remove.bg/v1.0/removebg", {
+            method: "POST",
+            headers: {
+                "X-Api-Key": apiKey
+            },
+            body: formData
+        });
+
+        if(!res.ok){
+            throw new Error("API Error");
+        }
+
+        let blob = await res.blob();
+        resultBlob = blob;
+
+        document.getElementById("resultPreview").src = URL.createObjectURL(blob);
+
+    } catch(err){
+        alert("Error removing background. Check API key.");
+        console.log(err);
+    }
+}
+
+function downloadImage(){
+    if(!resultBlob){
+        alert("No image to download");
+        return;
+    }
+
+    let format = document.getElementById("format").value;
+
+    let a = document.createElement("a");
+    let url = URL.createObjectURL(resultBlob);
+
+    a.href = url;
+    a.download = "background-removed." + format;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+</script>
