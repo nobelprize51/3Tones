@@ -14,26 +14,26 @@ font-family:Arial,sans-serif;
 }
 
 body{
-background:#f4f8ff;
-padding:20px;
+background:#f5f9ff;
+padding:30px;
 }
 
-.contact-card{
-max-width:700px;
+.contact-container{
+max-width:650px;
 margin:auto;
 background:#fff;
 padding:30px;
 border-radius:12px;
-box-shadow:0 10px 25px rgba(0,0,0,.08);
+box-shadow:0 10px 30px rgba(0,0,0,.08);
 }
 
-h2{
+.contact-container h2{
 text-align:center;
 color:#0d6efd;
 margin-bottom:10px;
 }
 
-p{
+.contact-container p{
 text-align:center;
 color:#666;
 margin-bottom:25px;
@@ -45,8 +45,8 @@ margin-bottom:18px;
 
 label{
 display:block;
-margin-bottom:6px;
-font-weight:600;
+margin-bottom:8px;
+font-weight:bold;
 color:#333;
 }
 
@@ -54,7 +54,7 @@ input,
 textarea{
 width:100%;
 padding:14px;
-border:1px solid #ddd;
+border:1px solid #ccc;
 border-radius:8px;
 font-size:16px;
 outline:none;
@@ -64,7 +64,7 @@ transition:.3s;
 input:focus,
 textarea:focus{
 border-color:#0d6efd;
-box-shadow:0 0 8px rgba(13,110,253,.2);
+box-shadow:0 0 5px rgba(13,110,253,.3);
 }
 
 textarea{
@@ -77,36 +77,19 @@ width:100%;
 padding:15px;
 background:#0d6efd;
 color:#fff;
-font-size:17px;
 border:none;
 border-radius:8px;
+font-size:18px;
 cursor:pointer;
 transition:.3s;
-font-weight:bold;
 }
 
 button:hover{
 background:#0b5ed7;
 }
 
-.contact-info{
-margin-top:30px;
-text-align:center;
-color:#555;
-line-height:1.8;
-}
-
-.contact-info a{
-color:#0d6efd;
-text-decoration:none;
-}
-
-.contact-info a:hover{
-text-decoration:underline;
-}
-
 @media(max-width:600px){
-.contact-card{
+.contact-container{
 padding:20px;
 }
 }
@@ -115,49 +98,40 @@ padding:20px;
 
 <body>
 
-<div class="contact-card">
+<div class="contact-container">
 
 <h2>Contact Us</h2>
 
-<p>Have questions, suggestions, or feedback? We'd love to hear from you.</p>
+<p>Have a question or suggestion? We'd love to hear from you.</p>
 
-<form action="#" method="post">
+<form action="https://formsubmit.co/nobelprize51@gmail.com" method="POST">
+
+<input type="hidden" name="_captcha" value="false">
+<input type="hidden" name="_subject" value="New Contact Message">
 
 <div class="form-group">
 <label>Full Name</label>
-<input type="text" placeholder="Enter your name" required>
+<input type="text" name="name" required>
 </div>
 
 <div class="form-group">
 <label>Email Address</label>
-<input type="email" placeholder="Enter your email" required>
+<input type="email" name="email" required>
 </div>
 
 <div class="form-group">
 <label>Subject</label>
-<input type="text" placeholder="Subject" required>
+<input type="text" name="subject" required>
 </div>
 
 <div class="form-group">
 <label>Message</label>
-<textarea placeholder="Write your message..." required></textarea>
+<textarea name="message" required></textarea>
 </div>
 
 <button type="submit">Send Message</button>
 
 </form>
-
-<div class="contact-info">
-
-<strong>Email:</strong><br>
-<a href="mailto:nobelprize51@gmail.com">nobelprize51@gmail.com</a>
-
-<br><br>
-
-<strong>Website:</strong><br>
-<a href="https://3tones.xyz" target="_blank">https://3tones.xyz</a>
-
-</div>
 
 </div>
 
