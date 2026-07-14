@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pakistan Electricity Bill Checker</title>
+    <style>
+        :root {
+            --primary-color: #008751; /* Elegant green */
+            --secondary-color: #1a1a1a;
+            --background-light: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-muted: #666666;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .bill-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            max-width: 480px;
+            width: 100%;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        .brand-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .brand-header h2 {
+            color: var(--primary-color);
+            margin: 0 0 8px 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .brand-header p {
+            color: var(--text-muted);
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--secondary-color);
+        }
+
+        .form-group select, 
+        .form-group input {
+            padding: 12px 15px;
+            border: 1.5px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            outline: none;
+            background-color: #fafafa;
+        }
+
+        .form-group select:focus, 
+        .form-group input:focus {
+            border-color: var(--primary-color);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(0, 135, 81, 0.1);
+        }
+
+        .btn-check {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-check:hover {
+            background-color: #006f42;
+        }
+
+        .btn-check:active {
+            transform: scale(0.98);
+        }
+
+        .alert-info {
+            background-color: #e8f5e9;
+            border-left: 4px solid var(--primary-color);
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #1b5e20;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 25px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+<div class="bill-card">
+    <div class="brand-header">
+        <h2>Bijli Bill Checker</h2>
+        <p>Check your duplicate electricity bill instantly online</p>
+    </div>
+
+    <!-- Step 1: Select DISCO -->
+    <div class="form-group">
+        <label for="company">Select Electricity Company</label>
+        <select id="company" onchange="handleCompanyChange()">
+            <option value="lesco">LESCO (Lahore)</option>
+            <option value="mepco">MEPCO (Multan)</option>
+            <option value="iesco">IESCO (Islamabad)</option>
+            <option value="fesco">FESCO (Faisalabad)</option>
+            <option value="gepco">GEPCO (Gujranwala)</option>
+            <option value="pesco">PESCO (Peshawar)</option>
+            <option value="hesco">HESCO (Hyderabad)</option>
+            <option value="sepco">SEPCO (Sukkur)</option>
+            <option value="qesco">QESCO (Quetta)</option>
+            <option value="ke">K-Electric (Karachi)</option>
+        </select>
+    </div>
+
+    <!-- Step 2: Input Reference Number -->
+    <div class="form-group">
+        <label id="num-label" for="refNumber">14-Digit Reference Number</label>
+        <input type="text" id="refNumber" placeholder="e.g. 15112345678901" maxlength="14" required>
+    </div>
+
+    <!-- Action Button -->
+    <button class="btn-check" onclick="checkBill()">Check Duplicate Bill</button>
+
+    <!-- Success Message Box -->
+    <div id="statusAlert" class="alert-info">
+        ✓ Your reference number has been copied! Paste it on the next page to fetch your bill.
+    </div>
+
+    <div class="footer-note">
+        Find your reference/account number in the top-left or top-right corner of your old paper bill.
+    </div>
+</div>
+
+<script>
+    // Keep placeholder matching company requirements
+    function handleCompanyChange() {
+        const company = document.getElementById('company').value;
+        const numLabel = document.getElementById('num-label');
+        const inputField = document.getElementById('refNumber');
+
+        if (company === 'ke') {
+            numLabel.innerText = "13-Digit Account Number";
+            inputField.placeholder = "e.g. 0400012345678";
+            inputField.maxLength = 13;
+        } else {
+            numLabel.innerText = "14-Digit Reference Number";
+            inputField.placeholder = "e.g. 15112345678901";
+            inputField.maxLength = 14;
+        }
+    }
+
+    function checkBill() {
+        const company = document.getElementById('company').value;
+        const refNum = document.getElementById('refNumber').value.trim();
+        const alertBox = document.getElementById('statusAlert');
+
+        if (!refNum) {
+            alert("Please enter your reference/account number first!");
+            return;
+        }
+
+        // Copy input to clipboard automatically to make pasting effortless
+        navigator.clipboard.writeText(refNum).then(() => {
+            alertBox.style.display = "block";
+            setTimeout(() => { alertBox.style.display = "none"; }, 5000);
+        }).catch(err => {
+            console.log("Clipboard block bypassed or not supported.");
+        });
+
+        let targetUrl = "";
+
+        // Route to the correct official PITC billing URLs
+        if (company === 'ke') {
+            targetUrl = `https://www.ke.com.pk/customer-services/bill-payment-options/`; // Redirects to KE billing portal
+        } else {
+            // Standard PITC URLs for general DISCOs
+            targetUrl = `https://bill.pitc.com.pk/${company}bill?ref=${refNum}`;
+        }
+
+        // Open official billing portal in a new tab
+        window.open(targetUrl, '_blank');
+    }
+</script>
+
+</body>
+</html>
